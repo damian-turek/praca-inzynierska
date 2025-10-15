@@ -1,0 +1,18 @@
+.statisticsContainer {
+    width: 80%;
+    max-width: 1400px;
+
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(2, 1fr);
+    gap: 20px;
+
+
+    & > div {
+        padding: 20px;
+        background-color: var(--color-white);
+
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+}

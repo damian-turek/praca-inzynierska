@@ -1,0 +1,41 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    width: 60%;
+    height: 100%;
+
+    h2 {
+        color: var(--color-light-green);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        input, textarea {
+            padding: 10px;
+            font-size: var(--small-font-size);
+
+            border-radius: 10px;
+            border: 2px solid var(--color-light-grey);
+
+            transition: border-color 0.2s ease;
+
+            &::placeholder {
+                opacity: 0.5;
+            }
+
+            &:focus {
+                border-color: var(--color-lighter-green);
+                outline: none;
+            }
+        }
+
+        textarea {
+            height: 350px;
+        }
+    }
+}

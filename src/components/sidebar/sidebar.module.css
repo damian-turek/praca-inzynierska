@@ -1,0 +1,31 @@
+.navigation {
+    height: 90%;
+
+    margin: 40px 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    & svg {
+        width: 30px;
+        height: 30px;
+
+        color: var(--color-light-green);
+
+        transition: 0.3s all ease-in-out;
+
+        &:hover {
+            color: var(--color-lighter-green);
+            transform: scale(1.1);
+        }
+    }
+}

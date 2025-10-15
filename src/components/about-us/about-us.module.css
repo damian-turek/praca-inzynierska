@@ -1,0 +1,61 @@
+.aboutUsContainer {
+    max-width: 1300px;
+
+    margin: 50px 150px;
+    padding: 70px 120px 50px;
+
+    display: flex;
+    align-items: center;
+
+    background-color: var(--color-lighter-green);
+    color: var(--color-white);
+
+    border-radius: 10px;
+
+    & > div {
+        & > h2 {
+            margin: 0 0 40px;
+            font-size: var(--subtitle-font-size);
+        }
+
+        .text {
+
+
+            font-size: var(--bigger-font-size);
+
+            margin: 0 100px 40px 0;
+        }
+
+        & > .button {
+            margin: 10px 0 0 30px;
+            padding: 10px 30px;
+
+            font-size: var(--bigger-font-size);
+            font-weight: 300;
+
+            text-align: center;
+            text-decoration: none;
+
+            color: var(--color-lighter-green);
+
+            border: none;
+            border-radius: 30px;
+            background-color: var(--color-white);
+
+            transition: 0.5s;
+            cursor: pointer;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        & > img:nth-child(2) {
+            margin: -50px 0 0 100px;
+        }
+        & > img:nth-child(3) {
+            margin: -50px 0 0;
+        }
+    }
+
+}

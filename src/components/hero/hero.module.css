@@ -1,0 +1,75 @@
+.hero {
+    display: flex;
+    justify-content: space-between;
+
+    .motto {
+        display: flex;
+        flex-direction: column;
+
+        padding: 5% 0 0 10%;
+
+        .slogan {
+            margin: 0 0 60px;
+
+            color: var(--color-light-green);
+
+            font-size: var(--slogan-font-size);
+        }
+
+        .slogan span {
+            display: block;
+            padding: 0 0 0 100px;
+        }
+
+        .arrow {
+            margin: -80px 0 20px 60px;
+
+            clip-path: inset(0 100% 0 0); /* na start - wszystko obcięte od prawej */
+            animation: draw 2s forwards;
+        }
+
+        .description {
+            padding: 0 0 0 120px;
+            margin: 0 -100px 0 0;
+
+            font-family: 'Flamenco', cursive;
+            font-size: 1.4rem;
+        }
+    }
+
+    .video {
+        width: 50vw;
+
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 30% 100%);
+
+        animation: slideInLeft 1s ease-out;
+    }
+}
+
+@keyframes draw {
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(10%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-10%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

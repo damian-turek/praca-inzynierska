@@ -1,0 +1,10 @@
+export * from './about-us'
+export * from './auth'
+export * from './footer'
+export * from './header'
+export * from './hero'
+export * from './auth'
+export * from './services'
+export * from './sidebar'
+
+export * from './statistics'

@@ -1,0 +1,8 @@
+.newsWrapper {
+    margin: 5% 0;
+    width: 100%;
+    display: flex;
+    text-align: center;
+    gap: 50px;
+    padding: 20px;
+}

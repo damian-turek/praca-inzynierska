@@ -1,0 +1,80 @@
+.footer {
+    height: 22vh;
+    min-height: 170px;
+    max-height: 220px;
+
+    padding: 50px;
+
+    display: flex;
+    justify-content: center;
+    gap: 7vw;
+
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+
+    .description {
+        width: 50%;
+
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+
+        .logo {
+            font-size: var(--large-font-size);
+
+            .logoBold {
+                color: var(--color-light-green);
+            }
+        }
+
+        & > p {
+            font-size: var(--bigger-font-size);
+            font-family: 'Flamenco', cursive;
+        }
+    }
+
+    .contactSection {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        & > h4 {
+            font-size: var(--normal-font-size);
+            font-weight: bold;
+        }
+
+        & > a, & > p {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: var(--color-white);
+            text-decoration: none;
+
+            transition: 0.5s;
+        }
+
+        & > a:hover {
+            color: var(--color-light-green);
+        }
+    }
+
+    & > nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        & > a {
+            color: var(--color-white);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: var(--normal-font-size);
+
+            transition: 0.5s;
+        }
+
+        & > a:hover {
+            color: var(--color-light-green);
+        }
+    }
+}
