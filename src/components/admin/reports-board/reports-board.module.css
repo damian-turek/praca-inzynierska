@@ -1,0 +1,51 @@
+.container {
+    width: 1000px;
+    padding: 2rem;
+    background: #f5f6fa;
+    min-height: 100vh;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 1.5rem;
+}
+
+.board {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.column {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    min-height: 500px;
+    width: 250px;
+    transition: background 0.2s;
+}
+
+.columnTitle {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.card {
+    background: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: grab;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.15s ease;
+}
+
+.card:active {
+    transform: scale(1.02);
+}

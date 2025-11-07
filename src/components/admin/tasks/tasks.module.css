@@ -1,0 +1,84 @@
+.reportsContainer {
+   max-height: 100%;
+    overflow-y: auto;
+}
+
+.reportsTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #222;
+    text-align: center;
+}
+
+.reportsEmpty {
+    text-align: center;
+    color: #888;
+    font-size: 1.1rem;
+}
+
+.reportsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.reportElement {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.reportTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #1a202c;
+}
+
+.reportDescription {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.reportActions {
+    display: flex;
+    gap: 12px;
+}
+
+.acceptBtn, .declineBtn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.acceptBtn {
+    background: #38b000;
+    color: #fff;
+}
+
+.acceptBtn:hover {
+    background: #2d8600;
+}
+
+.declineBtn {
+    background: #e63946;
+    color: #fff;
+}
+
+.declineBtn:hover {
+    background: #b71c1c;
+}

@@ -104,20 +104,6 @@
             }
         }
 
-        & button {
-            width: 30%;
-
-            padding: 10px 20px;
-
-            background-color: var(--color-lighter-green);
-            color: var(--color-white);
-
-            border-radius: 50px;
-            border: none;
-
-            font-size: var(--normal-font-size);
-        }
-
         & a {
             font-size: var(--normal-font-size);
             color: var(--color-lighter-green);

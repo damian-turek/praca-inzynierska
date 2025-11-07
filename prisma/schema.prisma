@@ -8,27 +8,101 @@ datasource db {
 }
 
 model Users {
-  id           Int       @id @default(autoincrement())
-  email        String    @db.VarChar(255)
-  password     String    @db.VarChar(255)
-  created_at   DateTime? @default(now()) @db.Timestamp(6)
-  role         String    @db.VarChar(255)
-  first_name   String    @db.VarChar(50)
-  second_name  String    @db.VarChar(50)
-  phone_number String    @db.VarChar(20)
-  apartment_id Int?
-  community_id Int?
+  id              Int                      @id @default(autoincrement())
+  email           String                   @db.VarChar(255)
+  password        String                   @db.VarChar(255)
+  created_at      DateTime?                @default(now()) @db.Timestamp(6)
+  role            String                   @db.VarChar(255)
+  first_name      String                   @db.VarChar(50)
+  second_name     String                   @db.VarChar(50)
+  phone_number    String                   @db.VarChar(20)
+  apartment_id    Int?
+  apartment       Apartment?               @relation(fields: [apartment_id], references: [id])
+  news            News[]                   // użytkownik może dodawać newsy
+  reportsHandled  ProblemReport[]          @relation("handledBy")
+  reportsReported ProblemReport[]          @relation("reportedBy")
+  reservations    SharedSpaceReservation[]
+}
 
-  news News[]
+model Apartment {
+  id            Int          @id @default(autoincrement())
+  number        String        @db.VarChar(50)
+  community_id  Int?
+  community     Community?    @relation(fields: [community_id], references: [id], onDelete: Cascade)
+  users         Users[]
+}
+
+model Community {
+  id             Int          @id @default(autoincrement())
+  name           String        @db.VarChar(255)
+  address        String
+  apartments     Apartment[]
+  news           News[]
+  sharedSpaces   SharedSpace[]
 }
 
 model News {
-  id         Int       @id @default(autoincrement())
-  title      String    @db.VarChar(255)
-  content    String
-  created_at DateTime  @default(now()) @db.Timestamp(6)
-  updated_at DateTime? @updatedAt
-  created_by Int
+  id           Int        @id @default(autoincrement())
+  title        String      @db.VarChar(255)
+  content      String
+  created_at   DateTime    @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?   @updatedAt
+  created_by   Int
+  community_id Int?
+  user         Users       @relation(fields: [created_by], references: [id], onDelete: Cascade)
+  community    Community?  @relation(fields: [community_id], references: [id], onDelete: Cascade)
+}
 
-  user Users @relation(fields: [created_by], references: [id], onDelete: Cascade)
+model SharedSpace {
+  id             Int                      @id @default(autoincrement())
+  name           String                   @db.VarChar(255)
+  description    String?
+  max_places     Int
+  community_id   Int?
+  community      Community?               @relation(fields: [community_id], references: [id], onDelete: Cascade)
+  reservations   SharedSpaceReservation[]
+}
+
+model SharedSpaceReservation {
+  id              Int         @id @default(autoincrement())
+  shared_space_id Int
+  start_time      DateTime
+  end_time        DateTime
+  places_reserved Int
+  user_id         Int
+  created_at      DateTime    @default(now()) @db.Timestamp(6)
+  sharedSpace     SharedSpace @relation(fields: [shared_space_id], references: [id], onDelete: Cascade)
+  user            Users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model ProblemReport {
+  id               Int          @id @default(autoincrement())
+  title            String       @db.VarChar(255)
+  description      String
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?    @updatedAt
+  status           ReportStatus @default(ZGLOSZONE)
+
+  reported_by      Int
+  handled_by       Int?
+
+  accepted_at      DateTime?
+  closed_at        DateTime?
+  started_at       DateTime?    // 🔹 dodaj to, bo backend go używa
+  rejection_reason String?
+
+  reporter         Users        @relation("reportedBy", fields: [reported_by], references: [id], onDelete: Cascade)
+  handler          Users?       @relation("handledBy", fields: [handled_by], references: [id])
+}
+
+
+enum ReportStatus {
+  ZGLOSZONE
+  PRZYJETY
+  W_TRAKCIE
+  ZREALIZOWANE
+  ODRZUCONY
+  PRZYJETE
+  ODRZUCONE
+  ZAKONCZONE
 }

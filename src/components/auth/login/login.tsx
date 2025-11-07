@@ -5,21 +5,19 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from '../auth.module.css'
 
+type LoginRequest = {
+    email: string
+    password: string
+}
+
 export const Login = () => {
     const router = useRouter()
-    const [formData, setFormData] = useState<LoginRequest>({
-        email: '',
-        password: '',
-        rememberMe: false,
-    })
+    const [formData, setFormData] = useState<LoginRequest>({ email: '', password: '' })
     const [error, setError] = useState('')
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target
-
-        setFormData((prevState: LoginRequest) => ({
-            ...prevState, [name]: type === 'checkbox' ? checked : value,
-        }))
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,22 +27,30 @@ export const Login = () => {
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
+                credentials: 'include', // bardzo ważne, żeby cookies zostało ustawione
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             })
 
-            const data = await res.json()
-
-            if (res.ok) {
-                localStorage.setItem('jwt', data.token)
-                router.push('/admin/dashboard');
-            } else {
-                setError(data.errors)
-                console.error('Login failed:', data.errors)
+            if (!res.ok) {
+                const data = await res.json()
+                setError(data.error || 'Invalid credentials')
+                return
             }
 
-        } catch (err) {
-            setError('Something went wrong', error)
+            // fetch /me, żeby pobrać rolę z tokena w ciasteczku
+            const meRes = await fetch('/api/auth/me', { credentials: 'include' })
+            if (!meRes.ok) {
+                setError('Cannot fetch user info')
+                return
+            }
+
+            const me = await meRes.json()
+            if (me.role === "ADMIN") router.push('/admin/dashboard')
+            else router.push('/user/dashboard')
+
+        } catch {
+            setError('Something went wrong')
         }
     }
 
@@ -52,35 +58,12 @@ export const Login = () => {
         <form className={styles.form} onSubmit={handleSubmit}>
             <h2>Welcome back</h2>
             <p className={styles.welcomeBackText}>
-                Glad to see you again &#128588; <br/>
-                Login to your account below
+                Glad to see you again 👋 <br/> Login to your account below
             </p>
-            <input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-                required
-            />
-            <input
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-                required
-            />
-            <label>
-                <p>Remember me</p>
-                <input
-                    name="rememberMe"
-                    type="checkbox"
-                    checked={formData.rememberMe}
-                    onChange={handleChange}
-                />
-            </label>
+            <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="Email" required />
+            <input name="password" type="password" value={formData.password} onChange={handleChange} placeholder="Password" required />
             <button type="submit">Sign in</button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <p>Don't have an account? <Link href='/register'>Sign up now!</Link></p>
         </form>
     )

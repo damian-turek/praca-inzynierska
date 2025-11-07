@@ -13,28 +13,37 @@ type AddNewsProps = {
 export const AddNews = ({ onNewsAdded }: AddNewsProps) => {
     const [title, setTitle] = useState('')
     const [message, setMessage] = useState('')
-    const id = 1
+    const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (!title.trim() || !message.trim()) {
+            toast.error('Please fill in all fields')
+            return
+        }
 
+        setLoading(true)
         try {
             const res = await fetch('/api/news', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, message, id }),
+                credentials: 'include', // ✅ include httpOnly cookie
+                body: JSON.stringify({ title, message }),
             })
 
-            if (!res.ok) throw new Error()
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}))
+                throw new Error(errData.error || 'Failed to post news')
+            }
 
-            await res.json()
             toast.success('News posted successfully!')
             setTitle('')
             setMessage('')
-
             onNewsAdded()
-        } catch {
-            toast.error('Failed to post news.')
+        } catch (err: any) {
+            toast.error(err.message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -48,12 +57,15 @@ export const AddNews = ({ onNewsAdded }: AddNewsProps) => {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    disabled={loading}
                 />
                 <textarea
+                    placeholder="Message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    disabled={loading}
                 />
-                <input type="submit" value="POST" />
+                <input type="submit" value={loading ? 'Posting...' : 'POST'} disabled={loading} />
             </form>
         </div>
     )

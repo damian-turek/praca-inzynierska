@@ -2,12 +2,13 @@
 
 import React, {useState, useEffect} from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-
+import { toast } from 'react-toastify'
 
 import { Profile } from './segments'
 
 import styles from './dashboard.module.css'
 import { User } from '../../../../types/user'
+import {AdminProblemReports} from "@/components/admin/tasks";
 
 export const AdminInfo = () => {
     const [userData, setUserData] = useState<User | undefined>(undefined);
@@ -20,16 +21,23 @@ export const AdminInfo = () => {
     ]
 
     useEffect(() => {
-        const token = localStorage.getItem('jwt')
-        fetch('/api/users', {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then(res => res.json())
-            .then(data => setUserData(data))
-    }, [])
+        const fetchUserData = async () => {
+            try {
+                const res = await fetch('/api/users', {
+                    method: 'GET',
+                    credentials: 'include', // ✅ include httpOnly cookie
+                });
+
+                if (!res.ok) throw new Error('Unauthorized');
+                const data = await res.json();
+                setUserData(data);
+            } catch (err: any) {
+                toast.error(err.message);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     return (
         <div className={styles.wrapper}>
@@ -47,7 +55,7 @@ export const AdminInfo = () => {
                 </ResponsiveContainer>
             </div>
             <div className={`${styles.item2} ${styles.item}`}>
-            New tasks
+            <AdminProblemReports />
             </div>
         </div>
     )
