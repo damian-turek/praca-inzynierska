@@ -1,5 +1,6 @@
 .container {
-    height: 100vh;
+    height: 98vh;
+    width: 98%;
     display: grid;
     grid-template-columns: 120px 1fr;
     grid-template-areas: 'sidebar header';

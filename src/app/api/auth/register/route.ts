@@ -1,44 +1,28 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret'
 
 export async function POST(request: Request) {
     const body = await request.json()
-    const { first_name, second_name, email, phone_number, apartment_id, password } = body
+    const { first_name, second_name, email, phone_number, pesel } = body
 
     const existingUser = await prisma.users.findFirst({ where: { email } })
-    if (existingUser) return NextResponse.json({ errors: 'User already exists' }, { status: 400 })
+    if (existingUser)
+        return NextResponse.json({ error: 'User already exists' }, { status: 400 })
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const user = await prisma.users.create({
+    const existingRequest = await prisma.userRequest.findFirst({ where: { email } })
+    if (existingRequest)
+        return NextResponse.json({ error: 'Request already pending or processed' }, { status: 400 })
+
+    await prisma.userRequest.create({
         data: {
             first_name,
             second_name,
             email,
             phone_number,
-            apartment_id: apartment_id ? Number(apartment_id) : null,
-            password: hashedPassword,
-            role: 'USER'
-        },
+            pesel,
+            status: 'PENDING'
+        }
     })
 
-    const token = jwt.sign(
-        { userId: user.id, role: user.role, apartmentId: user.apartment_id },
-        JWT_SECRET,
-        { expiresIn: '1h' }
-    )
-
-    const response = NextResponse.json({ message: 'Registration successful' })
-    response.cookies.set('jwt', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        path: '/',
-        maxAge: 60 * 60,
-    })
-
-    return response
+    return NextResponse.json({ message: 'Registration request submitted. Please wait for admin approval.' })
 }

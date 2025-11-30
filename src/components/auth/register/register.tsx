@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import styles from '../auth.module.css'
 
 type RegisterRequest = {
@@ -9,20 +8,18 @@ type RegisterRequest = {
     second_name: string
     email: string
     phone_number: string
-    apartment_id: number | null
-    password: string
+    pesel: string
 }
 
 export const Register = () => {
-    const router = useRouter()
     const [formData, setFormData] = useState<RegisterRequest>({
         first_name: '',
         second_name: '',
         email: '',
         phone_number: '',
-        apartment_id: null,
-        password: ''
+        pesel: ''
     })
+    const [statusMessage, setStatusMessage] = useState('')
     const [error, setError] = useState('')
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,39 +30,43 @@ export const Register = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError('')
+        setStatusMessage('')
+
         try {
-            const res = await fetch(`/api/auth/register`, {
+            const res = await fetch('/api/auth/register', {
                 method: 'POST',
-                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             })
 
+            const data = await res.json()
             if (res.ok) {
-                router.push('/user/dashboard')
+                setStatusMessage('✅ Wniosek o rejestrację został wysłany. Poczekaj na zatwierdzenie przez administratora.')
             } else {
-                const data = await res.json()
-                setError(data.errors)
+                setError(data.errors || '❌ Wystąpił błąd.')
             }
         } catch {
-            setError('Something went wrong')
+            setError('❌ Coś poszło nie tak.')
         }
     }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
-            <h2>Join us today</h2>
+            <h2>Rejestracja użytkownika</h2>
             <p className={styles.welcomeBackText}>
-                We’re excited to have you here 🎉 <br/> Create your account below
+                Podaj swoje dane, a administrator zatwierdzi Twoje konto po weryfikacji.
             </p>
-            <input name="first_name" type="text" placeholder="first name" onChange={handleChange} value={formData.first_name} required />
-            <input name="second_name" type="text" placeholder="second name" onChange={handleChange} value={formData.second_name} required />
-            <input name="email" type="email" placeholder="email" onChange={handleChange} value={formData.email} required />
-            <input name="phone_number" type="tel" placeholder="phone" onChange={handleChange} value={formData.phone_number} required />
-            <input name="apartment_id" type="number" placeholder="apartment id" onChange={handleChange} value={formData.apartment_id ?? ''} required />
-            <input name="password" type="password" placeholder="password" onChange={handleChange} value={formData.password} required />
-            <button type="submit">Sign up</button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+
+            <input name="first_name" type="text" placeholder="Imię" onChange={handleChange} value={formData.first_name} required />
+            <input name="second_name" type="text" placeholder="Nazwisko" onChange={handleChange} value={formData.second_name} required />
+            <input name="email" type="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
+            <input name="phone_number" type="tel" placeholder="Telefon" onChange={handleChange} value={formData.phone_number} required />
+            <input name="pesel" type="text" placeholder="PESEL" onChange={handleChange} value={formData.pesel} required maxLength={11} />
+
+            <button type="submit">Wyślij wniosek</button>
+
+            {statusMessage && <p style={{ color: 'green', marginTop: '10px' }}>{statusMessage}</p>}
+            {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
         </form>
     )
 }

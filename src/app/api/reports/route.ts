@@ -23,6 +23,21 @@ export async function GET(request: NextRequest) {
                 NOT: { status: 'ODRZUCONE' },
             },
             orderBy: { created_at: 'desc' },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                status: true,
+                reporter: {
+                    select: {
+                        apartment: {
+                            select: {
+                                number: true,
+                            },
+                        },
+                    },
+                },
+            },
         })
 
         return NextResponse.json(reports)
@@ -44,7 +59,6 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 })
         }
 
-        // ✅ Ensure userId exists
         const userId = decoded.userId
         if (!userId) return NextResponse.json({ error: 'User ID not found in token' }, { status: 401 })
 
@@ -59,7 +73,7 @@ export async function POST(request: NextRequest) {
                 title,
                 description,
                 status: 'ZGLOSZONE',
-                reported_by: userId, // guaranteed number now
+                reported_by: userId,
             },
         })
 

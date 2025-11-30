@@ -1,5 +1,6 @@
 export * from './about-us'
 export * from './auth'
+export * from './chatbot'
 export * from './footer'
 export * from './header'
 export * from './hero'

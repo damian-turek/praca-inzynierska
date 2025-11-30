@@ -63,6 +63,30 @@ export async function POST(
         const updated = await prisma.problemReport.update({
             where: { id: reportId },
             data: updateData,
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                status: true,
+                reported_by: true,
+                handled_by: true,
+                accepted_at: true,
+                started_at: true,
+                closed_at: true,
+                rejection_reason: true,
+
+                // 🟢 NEW: dane o zgłaszającym → mieszkanie
+                reporter: {
+                    select: {
+                        apartment: {
+                            select: {
+                                id: true,
+                                number: true,
+                            }
+                        }
+                    }
+                }
+            }
         })
 
         return NextResponse.json(updated)

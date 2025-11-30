@@ -1,8 +1,7 @@
 .container {
-    width: 1000px;
+    height: 85vh;
     padding: 2rem;
     background: #f5f6fa;
-    min-height: 100vh;
 }
 
 .title {
@@ -49,3 +48,14 @@
 .card:active {
     transform: scale(1.02);
 }
+
+.apartmentTag {
+    margin-top: 6px;
+    font-size: 12px;
+    background: #eef6ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #004c9f;
+    width: fit-content;
+}
+

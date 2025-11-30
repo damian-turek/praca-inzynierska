@@ -28,7 +28,8 @@ export default function RootLayout({
         />
         <title>{metadata.title}</title>
       </head>
-      <body>{children}</body>
+      <body>
+      {children}</body>
     </html>
   )
 }

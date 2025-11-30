@@ -1,34 +1,37 @@
 'use client'
 
-import React, {useState, useEffect} from 'react'
-
-
-import { Profile } from './segments'
-
+import React, { useState, useEffect } from 'react'
 import styles from './dashboard.module.css'
-import { User } from '../../../../types/user'
-import {News} from "@prisma/client";
+import { News } from "@prisma/client"
+import { Profile } from "@/components/admin/dashboard/segments"
+
+type User = {
+    id: string
+    name: string
+    email: string
+    role: string
+    first_name: string
+    second_name: string
+    created_at: string
+    phone_number: string
+}
 
 export const UserInfo = () => {
-    const [userData, setUserData] = useState<User | undefined>(undefined);
-    const [news, setNews] = useState<News[] | undefined>(undefined);
+    const [userData, setUserData] = useState<User | undefined>(undefined)
+    const [news, setNews] = useState<News[] | undefined>(undefined)
 
     useEffect(() => {
         const token = localStorage.getItem('jwt')
         fetch('/api/users', {
             method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
             .then(data => setUserData(data))
     }, [])
 
     useEffect(() => {
-        fetch('/api/news', {
-            method: 'GET',
-        })
+        fetch('/api/news', { method: 'GET' })
             .then(res => res.json())
             .then(data => setNews(data))
     }, [])
@@ -38,15 +41,21 @@ export const UserInfo = () => {
             <div className={`${styles.adminInfo} ${styles.item}`}>
                 {userData && <Profile {...userData} />}
             </div>
-            <div className={`${styles.chart} ${styles.item}`}>
-                <h2>News</h2>
-                {news && news.map((item) => (
-                    <div key={item.id} className={styles.newsItem}>
-                        <h3>{item.title}</h3>
-                        <p>{item.created_at instanceof Date ? item.created_at.toLocaleString() : new Date(item.created_at).toLocaleString()}</p>
-                        <p>{item.content}</p>
-                    </div>
-                ))}
+
+            <div className={`${styles.newsSection} ${styles.item}`}>
+                <h2 className={styles.newsTitle}>Latest News</h2>
+                <div className={styles.newsList}>
+                    {news?.map((item) => (
+                        <div key={item.id} className={styles.newsItem}>
+                            <h3 className={styles.newsItemTitle}>{item.title}</h3>
+                            <p className={styles.newsItemDate}>
+                                {new Date(item.created_at).toLocaleString()}
+                            </p>
+                            <p className={styles.newsItemContent}>{item.content}</p>
+                        </div>
+                    ))}
+                    {!news?.length && <p className={styles.noNews}>No news available</p>}
+                </div>
             </div>
         </div>
     )

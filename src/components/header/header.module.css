@@ -15,17 +15,6 @@
     z-index: 1;
 
 
-    .logo {
-        font-size: var(--large-font-size);
-
-        color: var(--color-light-green);
-
-        .logoBold {
-            font-weight: bold;
-            color: var(--color-dark-green);
-        }
-    }
-
     .login {
         padding: 2px 2px;
 
@@ -67,5 +56,16 @@
             }
         }
 
+    }
+}
+
+.logo {
+    font-size: var(--large-font-size);
+
+    color: var(--color-light-green);
+
+    .logoBold {
+        font-weight: bold;
+        color: var(--color-dark-green);
     }
 }

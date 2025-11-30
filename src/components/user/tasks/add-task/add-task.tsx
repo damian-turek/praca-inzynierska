@@ -23,10 +23,8 @@ export const AddTask = () => {
         try {
             const res = await fetch('/api/reports', {
                 method: 'POST',
-                credentials: 'include', // ✅ send httpOnly cookie
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, type, description })
             })
 
@@ -47,27 +45,31 @@ export const AddTask = () => {
         }
     }
 
-
     return (
         <div className={styles.wrapper}>
             <ToastContainer position="top-right" autoClose={3000} />
-            <form onSubmit={handleSubmit}>
-                <h2>Add Task</h2>
-                <label>
+            <form className={styles.formWrapper} onSubmit={handleSubmit}>
+                <h2 className={styles.title}>Add Task</h2>
+
+                <label className={styles.label}>
+                    Title
                     <input
+                        className={styles.input}
                         type="text"
-                        required
-                        placeholder="Title"
+                        placeholder="Task title"
                         value={title}
                         onChange={e => setTitle(e.target.value)}
+                        disabled={loading}
                     />
                 </label>
-                <label>
+
+                <label className={styles.label}>
+                    Type
                     <select
-                        name="type"
-                        required
+                        className={styles.select}
                         value={type}
                         onChange={e => setType(e.target.value)}
+                        disabled={loading}
                     >
                         <option value="Select Type" disabled>Select report type</option>
                         <option value="maintenance">Maintenance Issue</option>
@@ -82,19 +84,26 @@ export const AddTask = () => {
                         <option value="other">Other</option>
                     </select>
                 </label>
-                <label>
+
+                <label className={styles.label}>
+                    Description
                     <textarea
-                        placeholder="Description"
-                        required
+                        className={styles.textarea}
+                        placeholder="Task description"
                         value={description}
                         onChange={e => setDescription(e.target.value)}
+                        disabled={loading}
                     />
                 </label>
-                <button type="submit" disabled={loading}>
+
+                <button className={styles.button} type="submit" disabled={loading}>
                     {loading ? 'Dodawanie...' : 'Add Task'}
                 </button>
             </form>
-            <PrevTasks />
+
+            <div className={styles.prevTasksWrapper}>
+                <PrevTasks />
+            </div>
         </div>
     )
 }

@@ -1,0 +1,58 @@
+.container {
+    padding: 2rem;
+    background: #f5f6fa;
+    border-radius: 12px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 1.5rem;
+}
+
+.docsList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.docCard {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.docCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.docInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.docDate {
+    font-size: 14px;
+    color: #555;
+}
+
+.docLinks a {
+    margin-left: 10px;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+.openLink {
+    color: #1e90ff;
+}
+
+.downloadLink {
+    color: var(--color-light-green);
+}

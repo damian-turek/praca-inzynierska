@@ -3,11 +3,14 @@
 import { AddUser } from '@/components/admin/add-user'
 
 import '@/styles/global.css'
+import styles from "@/components/header/header.module.css";
+import React from "react";
 
 export default function UsersPage() {
 
     return (
         <>
+            <h3 className={styles.logo}>Community<span className={styles.logoBold}>Core</span></h3>
             <AddUser />
         </>
     )

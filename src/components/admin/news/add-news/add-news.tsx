@@ -50,9 +50,10 @@ export const AddNews = ({ onNewsAdded }: AddNewsProps) => {
     return (
         <div className={styles.wrapper}>
             <ToastContainer />
-            <h2>ADD NEWS</h2>
-            <form onSubmit={handleSubmit}>
+            <h2 className={styles.title}>ADD NEWS</h2>
+            <form onSubmit={handleSubmit} className={styles.form}>
                 <input
+                    className={styles.input}
                     placeholder="Title"
                     type="text"
                     value={title}
@@ -60,12 +61,18 @@ export const AddNews = ({ onNewsAdded }: AddNewsProps) => {
                     disabled={loading}
                 />
                 <textarea
+                    className={styles.textarea}
                     placeholder="Message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     disabled={loading}
                 />
-                <input type="submit" value={loading ? 'Posting...' : 'POST'} disabled={loading} />
+                <input
+                    type="submit"
+                    value={loading ? 'Posting...' : 'POST'}
+                    className={styles.submit}
+                    disabled={loading}
+                />
             </form>
         </div>
     )
