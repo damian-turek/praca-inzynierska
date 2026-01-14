@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma'
 export async function GET() {
     try {
         const users = await prisma.users.findMany({
+            where: {
+                role: { not: 'ADMIN' }
+            },
             select: {
                 id: true,
                 first_name: true,
@@ -22,7 +25,7 @@ export async function GET() {
 
         return NextResponse.json(users)
     } catch (err) {
-        console.error('Błąd w /api/admin/users:', err)
-        return NextResponse.json({ error: 'Błąd serwera' }, { status: 500 })
+        console.error('Error /api/admin/users:', err)
+        return NextResponse.json({ error: 'Server error' }, { status: 500 })
     }
 }

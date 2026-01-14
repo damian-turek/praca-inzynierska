@@ -3,18 +3,27 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-// Helpers -------------------------
 const random = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)]
-const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min
+const rand = (min: number, max: number) =>
+    Math.floor(Math.random() * (max - min + 1)) + min
+
+const randomPastDate = (yearsBack = 5) => {
+    const now = new Date()
+    const past = new Date()
+    past.setFullYear(now.getFullYear() - rand(1, yearsBack))
+    return past
+}
 
 const firstNames = [
-    "Michael", "Emma", "Olivia", "James", "Sophia", "Daniel", "Isabella", "Lucas", "Ethan", "Charlotte",
-    "Henry", "Amelia", "Jacob", "Ava", "Harper", "Noah", "Liam", "Mason", "Ella", "Grace"
+    "Michael", "Emma", "Olivia", "James", "Sophia", "Daniel", "Isabella", "Lucas",
+    "Ethan", "Charlotte", "Henry", "Amelia", "Jacob", "Ava", "Harper", "Noah",
+    "Liam", "Mason", "Ella", "Grace"
 ]
 
 const lastNames = [
-    "Smith", "Johnson", "Brown", "Taylor", "Anderson", "Martinez", "Davis", "Moore", "Walker", "Hall",
-    "Allen", "Young", "King", "Wright", "Scott", "Hill", "Green", "Adams", "Baker", "Turner"
+    "Smith", "Johnson", "Brown", "Taylor", "Anderson", "Martinez", "Davis", "Moore",
+    "Walker", "Hall", "Allen", "Young", "King", "Wright", "Scott", "Hill",
+    "Green", "Adams", "Baker", "Turner"
 ]
 
 const problemTitles = [
@@ -69,10 +78,7 @@ const newsContents = [
     "A community meeting will be held next Wednesday at 18:00."
 ]
 
-// ---------------------------------
-
 async function main() {
-    console.log("🗑️ Clearing database...")
 
     await prisma.message.deleteMany()
     await prisma.chat.deleteMany()
@@ -85,13 +91,8 @@ async function main() {
     await prisma.community.deleteMany()
     await prisma.userRequest.deleteMany()
 
-    console.log("📥 Seeding new data...")
+    const hashedPassword = await bcrypt.hash("123", 10)
 
-    // Hashowanie hasła 123
-    const plainPassword = "123"
-    const hashedPassword = await bcrypt.hash(plainPassword, 10)
-
-    // 🌆 Communities
     await prisma.community.createMany({
         data: [
             { name: "Sunset Residences", address: "Sunset Avenue 12, Seattle" },
@@ -102,7 +103,6 @@ async function main() {
 
     const communities = await prisma.community.findMany()
 
-    // 🏘️ Apartments
     for (const c of communities) {
         for (let i = 1; i <= 7; i++) {
             await prisma.apartment.create({
@@ -116,7 +116,6 @@ async function main() {
 
     const apartments = await prisma.apartment.findMany()
 
-    // 👤 Admin
     const admin = await prisma.users.create({
         data: {
             email: "admin@admin.com",
@@ -124,30 +123,31 @@ async function main() {
             role: "ADMIN",
             first_name: "System",
             second_name: "Admin",
-            phone_number: "+1 555 909 000"
+            phone_number: "+1 555 909 000",
+            residence_start: new Date(),
+            residence_end: null
         }
     })
 
-    // 👤 Users
     const users: any[] = []
 
     for (let i = 1; i <= 25; i++) {
-        const u = await prisma.users.create({
+        const user = await prisma.users.create({
             data: {
                 email: `resident${i}@mail.com`,
-                password: hashedPassword, // wszystkie hasła = 123
+                password: hashedPassword,
                 role: "USER",
                 first_name: random(firstNames),
                 second_name: random(lastNames),
                 phone_number: `+1 555 21${rand(10, 99)}`,
-                apartment_id: random(apartments).id
+                apartment_id: random(apartments).id,
+                residence_start: randomPastDate(5),
+                residence_end: null
             }
         })
-
-        users.push(u)
+        users.push(user)
     }
 
-    // 📰 News
     for (let i = 0; i < 10; i++) {
         await prisma.news.create({
             data: {
@@ -159,33 +159,32 @@ async function main() {
         })
     }
 
-    // 🏢 Shared Spaces
     const spaces: any[] = []
+
     for (const c of communities) {
-        const gym = await prisma.sharedSpace.create({
-            data: {
-                name: "Gym",
-                description: "Community fitness room",
-                max_places: 10,
-                community_id: c.id
-            }
-        })
-        const meeting = await prisma.sharedSpace.create({
-            data: {
-                name: "Meeting Room",
-                description: "Room for resident meetings",
-                max_places: 20,
-                community_id: c.id
-            }
-        })
-        spaces.push(gym, meeting)
+        spaces.push(
+            await prisma.sharedSpace.create({
+                data: {
+                    name: "Gym",
+                    description: "Community fitness room",
+                    max_places: 10,
+                    community_id: c.id
+                }
+            }),
+            await prisma.sharedSpace.create({
+                data: {
+                    name: "Meeting Room",
+                    description: "Room for resident meetings",
+                    max_places: 20,
+                    community_id: c.id
+                }
+            })
+        )
     }
 
-    // 📅 Reservations
     for (let i = 0; i < 20; i++) {
         const start = new Date()
         start.setHours(9 + (i % 6))
-
         const end = new Date(start.getTime() + 90 * 60 * 1000)
 
         await prisma.sharedSpaceReservation.create({
@@ -199,42 +198,30 @@ async function main() {
         })
     }
 
-    // 🛠️ Problem Reports
-    const statuses = [
-        ReportStatus.ZGLOSZONE,
-        ReportStatus.PRZYJETY,
-        ReportStatus.W_TRAKCIE,
-        ReportStatus.ZREALIZOWANE,
-        ReportStatus.ODRZUCONE
-    ]
+    const statuses = Object.values(ReportStatus)
 
     for (let i = 0; i < 25; i++) {
         const status = random(statuses)
 
         await prisma.problemReport.create({
             data: {
-                title: problemTitles[rand(0, problemTitles.length - 1)],
-                description: problemDescriptions[rand(0, problemDescriptions.length - 1)],
+                title: random(problemTitles),
+                description: random(problemDescriptions),
                 status,
                 reported_by: random(users).id,
-                handled_by: status !== ReportStatus.ZGLOSZONE ? admin.id : null,
-                accepted_at: status !== ReportStatus.ZGLOSZONE ? new Date() : null,
-                closed_at: status === ReportStatus.ZREALIZOWANE ? new Date() : null,
-                started_at: status === ReportStatus.W_TRAKCIE ? new Date() : null,
-                rejection_reason: status === ReportStatus.ODRZUCONE ? "Not enough information" : null
+                handled_by: status !== ReportStatus.REPORTED ? admin.id : null,
+                accepted_at: status !== ReportStatus.REPORTED ? new Date() : null,
+                started_at: status === ReportStatus.IN_PROGRESS ? new Date() : null,
+                closed_at: status === ReportStatus.COMPLETED ? new Date() : null,
+                rejection_reason: status === ReportStatus.REJECTED ? "Not enough information" : null
             }
         })
     }
 
-    // 💬 Chats
     for (let i = 0; i < 10; i++) {
         const user = random(users)
-
         const chat = await prisma.chat.create({
-            data: {
-                userId: user.id,
-                adminId: admin.id
-            }
+            data: { userId: user.id, adminId: admin.id }
         })
 
         await prisma.message.createMany({
@@ -245,10 +232,7 @@ async function main() {
         })
     }
 
-    // 📬 User Requests
     for (let i = 1; i <= 15; i++) {
-        const stat = [RequestStatus.APPROVED, RequestStatus.PENDING, RequestStatus.REJECTED][i % 3]
-
         await prisma.userRequest.create({
             data: {
                 email: `request${i}@gmail.com`,
@@ -256,12 +240,12 @@ async function main() {
                 first_name: random(firstNames),
                 second_name: random(lastNames),
                 phone_number: `+1 555 30${rand(10, 99)}`,
-                status: stat
+                status: [RequestStatus.APPROVED, RequestStatus.PENDING, RequestStatus.REJECTED][i % 3]
             }
         })
     }
-
-    console.log("🎉 SEED COMPLETED SUCCESSFULLY!")
 }
 
-main().finally(() => prisma.$disconnect())
+main()
+    .catch(console.error)
+    .finally(() => prisma.$disconnect())

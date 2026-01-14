@@ -9,19 +9,19 @@ export async function GET(req: Request) {
     const spaceId = searchParams.get("shared_space_id");
 
     if (!spaceId) {
-        return NextResponse.json({ error: "Brak ID przestrzeni" }, { status: 400 });
+        return NextResponse.json({ error: "No space ID" }, { status: 400 });
     }
 
     try {
         const reservations = await prisma.sharedSpaceReservation.findMany({
             where: { shared_space_id: Number(spaceId) },
             orderBy: { start_time: "asc" },
-            include: { user: true } // pobiera info o użytkowniku
+            include: { user: true }
         });
         return NextResponse.json(reservations);
     } catch (err) {
-        console.error("Błąd GET /reservations:", err);
-        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+        console.error("Error GET /reservations:", err);
+        return NextResponse.json({ error: "Server error" }, { status: 500 });
     }
 }
 
@@ -51,7 +51,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Space not found" }, { status: 404 });
         }
 
-        // Check overlapping reservations
         const overlapping = await prisma.sharedSpaceReservation.findMany({
             where: {
                 shared_space_id: Number(shared_space_id),

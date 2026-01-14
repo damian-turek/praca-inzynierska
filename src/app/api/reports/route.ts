@@ -1,4 +1,3 @@
-// app/api/reports/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { prisma } from '@/lib/prisma'
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest) {
 
         const reports = await prisma.problemReport.findMany({
             where: {
-                NOT: { status: 'ODRZUCONE' },
+                NOT: { status: 'REJECTED' },
             },
             orderBy: { created_at: 'desc' },
             select: {
@@ -72,7 +71,7 @@ export async function POST(request: NextRequest) {
             data: {
                 title,
                 description,
-                status: 'ZGLOSZONE',
+                status: 'REPORTED',
                 reported_by: userId,
             },
         })

@@ -17,8 +17,8 @@ export const AdminBillingCreator = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [charges, setCharges] = useState([
         { label: "Central heating", amount: "" },
-        { label: "Water", amount: "" },
-        { label: "Garbage", amount: "" },
+        { label: "Water consumption", amount: "" },
+        { label: "Municipal waste disposal", amount: "" },
         { label: "Repair fund", amount: "" }
     ]);
     const [loading, setLoading] = useState(false);
@@ -54,7 +54,6 @@ export const AdminBillingCreator = () => {
 
             toast.success("Document generated and added to user inbox!");
 
-            // Reset values
             setUserId(null);
             setCharges(charges.map(c => ({ ...c, amount: "" })));
 

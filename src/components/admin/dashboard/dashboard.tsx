@@ -58,19 +58,19 @@ export const AdminInfo = () => {
         const fetchSummary = async () => {
             try {
                 const res = await fetch('/api/summary')
-                if (!res.ok) throw new Error('Błąd pobierania danych')
+                if (!res.ok) throw new Error('Fetch data error')
                 const data = await res.json()
 
                 setReservationData(
-                    data?.reservations?.length ? data.reservations : [{ month: 'Brak danych', count: 0 }]
+                    data?.reservations?.length ? data.reservations : [{ month: 'No data', count: 0 }]
                 )
                 setReportData(
-                    data?.reports?.length ? data.reports : [{ status: 'Brak danych', count: 0 }]
+                    data?.reports?.length ? data.reports : [{ status: 'No data', count: 0 }]
                 )
             } catch (err: any) {
                 toast.error(err.message)
-                setReservationData([{ month: 'Błąd', count: 0 }])
-                setReportData([{ status: 'Błąd', count: 0 }])
+                setReservationData([{ month: 'Error', count: 0 }])
+                setReportData([{ status: 'Error', count: 0 }])
             }
         }
         fetchSummary()
@@ -78,15 +78,14 @@ export const AdminInfo = () => {
 
     return (
         <div className={styles.wrapper}>
-            {/* Lewa kolumna: profil + wykresy */}
             <div className={styles.mainContent}>
                 <div className={`${styles.adminInfo} ${styles.item}`}>
-                    {userData ? <Profile {...userData} /> : <p>Ładowanie profilu...</p>}
+                    {userData ? <Profile {...userData} /> : <p>Loading...</p>}
                 </div>
 
                 <div className={styles.chartsContainer}>
                     <div className={styles.chart}>
-                        <h3 className={styles.chartTitle}>Rezerwacje w miesiącach</h3>
+                        <h3 className={styles.chartTitle}>Reservations per month</h3>
                         <ResponsiveContainer width="100%" height="90%">
                             <BarChart
                                 data={reservationData}
@@ -101,7 +100,7 @@ export const AdminInfo = () => {
                     </div>
 
                     <div className={styles.chart}>
-                        <h3 className={styles.chartTitle}>Statusy zgłoszeń</h3>
+                        <h3 className={styles.chartTitle}>Report statuses</h3>
                         <ResponsiveContainer width="100%" height="90%">
                             <PieChart>
                                 <Pie
@@ -122,7 +121,6 @@ export const AdminInfo = () => {
                 </div>
             </div>
 
-            {/* Sidebar po prawej */}
             <div className={styles.sidebar}>
                 <AdminProblemReports />
             </div>

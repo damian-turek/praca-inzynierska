@@ -10,8 +10,8 @@ export async function GET() {
         });
         return NextResponse.json(spaces);
     } catch (err) {
-        console.error("Błąd GET /shared-spaces:", err);
-        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+        console.error("Error GET /shared-spaces:", err);
+        return NextResponse.json({ error: "Error" }, { status: 500 });
     }
 }
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json(newSpace);
     } catch (err) {
-        console.error("Błąd POST /shared-spaces:", err);
-        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+        console.error("Error POST /shared-spaces:", err);
+        return NextResponse.json({ error: "Server error" }, { status: 500 });
     }
 }

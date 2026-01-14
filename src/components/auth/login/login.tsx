@@ -27,7 +27,7 @@ export const Login = () => {
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
-                credentials: 'include', // bardzo ważne, żeby cookies zostało ustawione
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             })
@@ -38,7 +38,6 @@ export const Login = () => {
                 return
             }
 
-            // fetch /me, żeby pobrać rolę z tokena w ciasteczku
             const meRes = await fetch('/api/auth/me', { credentials: 'include' })
             if (!meRes.ok) {
                 setError('Cannot fetch user info')

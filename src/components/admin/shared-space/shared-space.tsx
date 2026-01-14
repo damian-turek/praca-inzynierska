@@ -64,7 +64,7 @@ export const SharedSpace = () => {
                     .catch(() => [])
             );
 
-            const results = await Promise.all(fetches); // każdy element to tablica rezerwacji albo []
+            const results = await Promise.all(fetches);
             const allReservations: Reservation[] = results.flat();
 
             setReservations(allReservations);
@@ -87,8 +87,7 @@ export const SharedSpace = () => {
             return;
         }
 
-        // pobierz najnowsze rezerwacje z serwera (funkcja teraz zwraca tablicę)
-        const allReservations = await fetchAllReservations(); // teraz zwraca Reservation[]
+        const allReservations = await fetchAllReservations();
 
         const available = spaces.map(space => {
             const reserved = (allReservations || [])
@@ -114,8 +113,6 @@ export const SharedSpace = () => {
         }
     }
 
-
-    // dodawanie przestrzeni
     async function handleAddSpace(e: React.FormEvent) {
         e.preventDefault()
         if (!newName.trim()) return toast.error("Enter a name for the space")
@@ -160,7 +157,7 @@ export const SharedSpace = () => {
                 throw new Error(err.error || "Unknown error")
             }
             toast.success("Reservation added successfully")
-            // odśwież dane
+
             setNewStart(""); setNewEnd(""); setSelectedSpaceId(null); setNewPlaces(1); setAvailableSpaces([])
             await fetchAllReservations()
         } catch (err: any) {
@@ -198,7 +195,6 @@ export const SharedSpace = () => {
                             <input type="datetime-local" value={newStart} onChange={e => {
                                 const v = e.target.value
                                 setNewStart(v)
-                                // fire & forget — calculate handles fetching
                                 calculateAvailableSpaces(v, newEnd)
                             }} />
                         </label>
@@ -233,7 +229,6 @@ export const SharedSpace = () => {
                             </ul>
                         </div>
                     ) : (
-                        // gdy nie ma jeszcze dat lub brak dostępnych
                         (newStart && newEnd) ? <p>No spaces available for given dates</p> : <p>Select start and end to see availability</p>
                     )}
 

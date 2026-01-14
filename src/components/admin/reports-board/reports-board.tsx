@@ -17,10 +17,10 @@ interface Report {
 }
 
 const columns = [
-    { id: 'ZGLOSZONE', title: 'To Accept' },
-    { id: 'PRZYJETE', title: 'Accepted' },
-    { id: 'W_TRAKCIE', title: 'In Progress' },
-    { id: 'ZREALIZOWANE', title: 'Completed' },
+    { id: 'REPORTED', title: 'To Accept' },
+    { id: 'ACCEPTED', title: 'Accepted' },
+    { id: 'IN_PROGRESS', title: 'In Progress' },
+    { id: 'COMPLETED', title: 'Completed' },
 ]
 
 export default function AdminProblemReports() {
@@ -49,13 +49,13 @@ export default function AdminProblemReports() {
     const updateReportStatus = async (id: number, newStatus: string) => {
         let action = ''
         switch (newStatus) {
-            case 'PRZYJETE':
+            case 'ACCEPTED':
                 action = 'accept'
                 break
-            case 'W_TRAKCIE':
+            case 'IN_PROGRESS':
                 action = 'in_progress'
                 break
-            case 'ZREALIZOWANE':
+            case 'COMPLETED':
                 action = 'complete'
                 break
             default:
@@ -124,7 +124,6 @@ export default function AdminProblemReports() {
                                                         <strong>{report.title}</strong>
                                                         <p>{report.description}</p>
 
-                                                        {/* Numer mieszkania */}
                                                         <div className={styles.apartmentTag}>
                                                             Apartment: {report.reporter?.apartment?.number ?? '—'}
                                                         </div>

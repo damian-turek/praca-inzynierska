@@ -6,9 +6,9 @@
 -- the enum.
 
 
-ALTER TYPE "ReportStatus" ADD VALUE 'PRZYJETE';
-ALTER TYPE "ReportStatus" ADD VALUE 'ODRZUCONE';
-ALTER TYPE "ReportStatus" ADD VALUE 'ZAKONCZONE';
+ALTER TYPE "ReportStatus" ADD VALUE 'ACCEPTED';
+ALTER TYPE "ReportStatus" ADD VALUE 'REJECTED';
+ALTER TYPE "ReportStatus" ADD VALUE 'COMPLETED';
 
 -- AlterTable
 ALTER TABLE "ProblemReport" ADD COLUMN     "accepted_at" TIMESTAMP(3),

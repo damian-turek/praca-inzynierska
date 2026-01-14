@@ -39,7 +39,6 @@ export async function POST(req: Request) {
     }
 }
 
-// GET /api/news — fetch latest news
 export async function GET() {
     try {
         const news = await prisma.news.findMany({

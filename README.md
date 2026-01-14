@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js + Prisma + Docker Project
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It uses PostgreSQL as a database (via Docker) and Prisma as ORM.
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install Node.js
+Download and install the latest LTS version of [Node.js](https://nodejs.org/).
 
+### 2. Install dependencies
+In the project directory, run:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Configure environment variables
+Copy the example environment file and fill in your own values:
+```bash
+cp .env.example .env
+# Edit .env if needed (especially DATABASE_URL)
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Start the database (PostgreSQL) with Docker
+Make sure Docker is installed and running. Then start the database:
+```bash
+docker compose up -d
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Run database migrations
+Apply the database schema using Prisma migrations:
+```bash
+npx prisma migrate deploy
+# or for development:
+npx prisma migrate dev
+```
+
+### 6. (Optional) Seed the database
+If you have a seed script, run:
+```bash
+npx prisma db seed
+```
+
+### 7. Start the development server
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+---
+
+## Project Structure
+- `docker-compose.yaml` – Docker config for PostgreSQL
+- `prisma/` – Prisma schema and migrations
+- `.env.example` – Example environment variables
+- `src/` – Application source code
+
+---
+
+## Useful Commands
+- `docker compose up -d` – Start the database
+- `docker compose down` – Stop the database
+- `npx prisma migrate deploy` – Apply migrations
+- `npm run dev` – Start the Next.js development server
+
+---
 
 ## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [Docker Documentation](https://docs.docker.com/)

@@ -9,7 +9,7 @@ export async function GET() {
 
         const reservationsMap = new Map<string, number>();
         for (const r of reservationsRaw) {
-            const month = r.start_time.toISOString().slice(0, 7); // np. "2025-11"
+            const month = r.start_time.toISOString().slice(0, 7);
             reservationsMap.set(month, (reservationsMap.get(month) || 0) + 1);
         }
         const reservations = Array.from(reservationsMap, ([month, count]) => ({ month, count }));
@@ -25,7 +25,7 @@ export async function GET() {
 
         return NextResponse.json({ reservations, reports });
     } catch (err) {
-        console.error("Błąd dashboard API:", err);
-        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+        console.error("Dashboard API error:", err);
+        return NextResponse.json({ error: "Server error" }, { status: 500 });
     }
 }

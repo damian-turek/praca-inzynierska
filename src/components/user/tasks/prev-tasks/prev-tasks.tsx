@@ -21,7 +21,7 @@ export const PrevTasks = () => {
             setLoading(true)
             try {
                 const res = await fetch('/api/reports/user', {
-                    credentials: 'include', // include httpOnly cookie
+                    credentials: 'include',
                 })
                 if (!res.ok) throw new Error('Failed to fetch reports')
                 const data: UserReport[] = await res.json()

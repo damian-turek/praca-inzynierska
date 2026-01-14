@@ -13,7 +13,7 @@
     background: rgba(var(--back-ground-color-rgb), 0.15);
     backdrop-filter: blur(12px) saturate(180%);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* uniemożliwia wychodzenie elementów */
+    overflow: hidden;
 }
 
 .mainContent {
@@ -39,7 +39,7 @@
     padding: 15px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     height: 100%;
-    overflow: hidden; /* etykiety nie wychodzą poza kafelek */
+    overflow: hidden;
 }
 
 .chartTitle {

@@ -23,14 +23,17 @@ model Users {
   reportsReported ProblemReport[]          @relation("reportedBy")
   reservations    SharedSpaceReservation[]
 
-  // 👇 relacje do czatu
   userChats  Chat[] @relation("UserChats")
   adminChats Chat[] @relation("AdminChats")
 
   Message Message[]
 
   billingDocuments BillingDocument[]
+
+  residence_start DateTime? @db.Timestamp(6)
+  residence_end   DateTime? @db.Timestamp(6)
 }
+
 
 model Apartment {
   id           Int        @id @default(autoincrement())
@@ -89,7 +92,7 @@ model ProblemReport {
   description String
   created_at  DateTime     @default(now()) @db.Timestamp(6)
   updated_at  DateTime?    @updatedAt
-  status      ReportStatus @default(ZGLOSZONE)
+  status      ReportStatus @default(REPORTED)
 
   reported_by Int
   handled_by  Int?
@@ -128,14 +131,11 @@ model Message {
 }
 
 enum ReportStatus {
-  ZGLOSZONE
-  PRZYJETY
-  W_TRAKCIE
-  ZREALIZOWANE
-  ODRZUCONY
-  PRZYJETE
-  ODRZUCONE
-  ZAKONCZONE
+  REPORTED
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
 }
 
 model UserRequest {

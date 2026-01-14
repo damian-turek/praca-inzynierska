@@ -82,3 +82,14 @@
 .declineBtn:hover {
     background: #b71c1c;
 }
+
+.apartmentTag {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1f2937;
+    background: #f3f4f6;
+    padding: 4px 10px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 8px;
+}

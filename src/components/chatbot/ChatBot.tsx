@@ -18,7 +18,6 @@ export default function ChatBot() {
                 const res = await fetch("/api/chat");
                 const data = await res.json();
 
-                // Admin: tablica czatów, User: jeden czat
                 const chatArray = Array.isArray(data) ? data : [data];
                 setChats(chatArray);
 
@@ -62,7 +61,6 @@ export default function ChatBot() {
 
             {show && (
                 <div className={styles.chatbotBox}>
-                    {/* Lista czatów dla admina */}
                     {chats.length > 1 && (
                         <div className={styles.chatList}>
                             {chats.map((chat) => (
@@ -79,7 +77,7 @@ export default function ChatBot() {
 
                     <div className={styles.chatWindow}>
                         {(!Array.isArray(messages) || messages.length === 0) ? (
-                            <p className={styles.empty}>Brak wiadomości</p>
+                            <p className={styles.empty}>No messages</p>
                         ) : (
                             messages.map((msg) => (
                                 <div key={msg.id} className={`${styles.message} ${msg.senderId === msg.sender?.id ? styles.userMsg : styles.adminMsg}`}>
@@ -96,7 +94,7 @@ export default function ChatBot() {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                            placeholder="Napisz wiadomość..."
+                            placeholder="Send message..."
                             className={styles.input}
                         />
                         <button onClick={sendMessage} className={styles.sendButton}>➤</button>

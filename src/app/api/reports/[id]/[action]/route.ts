@@ -26,7 +26,7 @@ export async function POST(
         switch (action) {
             case 'accept':
                 updateData = {
-                    status: 'PRZYJETE',
+                    status: 'ACCEPTED',
                     handled_by: decoded.userId,
                     accepted_at: new Date(),
                 }
@@ -34,7 +34,7 @@ export async function POST(
 
             case 'reject':
                 updateData = {
-                    status: 'ODRZUCONE',
+                    status: 'REJECTED',
                     handled_by: decoded.userId,
                     rejection_reason: reason || 'No reason provided',
                     closed_at: new Date(),
@@ -43,7 +43,7 @@ export async function POST(
 
             case 'in_progress':
                 updateData = {
-                    status: 'W_TRAKCIE',
+                    status: 'IN_PROGRESS',
                     handled_by: decoded.userId,
                     started_at: new Date(),
                 }
@@ -51,7 +51,7 @@ export async function POST(
 
             case 'complete':
                 updateData = {
-                    status: 'ZREALIZOWANE',
+                    status: 'COMPLETED',
                     closed_at: new Date(),
                 }
                 break
@@ -75,7 +75,6 @@ export async function POST(
                 closed_at: true,
                 rejection_reason: true,
 
-                // 🟢 NEW: dane o zgłaszającym → mieszkanie
                 reporter: {
                     select: {
                         apartment: {

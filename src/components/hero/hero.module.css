@@ -24,7 +24,7 @@
         .arrow {
             margin: -80px 0 20px 60px;
 
-            clip-path: inset(0 100% 0 0); /* na start - wszystko obcięte od prawej */
+            clip-path: inset(0 100% 0 0);
             animation: draw 2s forwards;
         }
 

@@ -8,7 +8,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret'
 export async function POST(request: Request) {
     const { email, password } = await request.json()
 
-    // sprawdź, czy istnieje wniosek oczekujący
     const pending = await prisma.userRequest.findFirst({
         where: { email, status: 'PENDING' }
     })

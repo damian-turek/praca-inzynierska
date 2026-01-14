@@ -14,11 +14,11 @@ export async function GET(request: NextRequest) {
         try {
             const decoded = jwt.verify(token, JWT_SECRET) as { userId: number }
             if (!decoded || !decoded.userId) {
-                return NextResponse.json({ error: 'Błędny token' }, { status: 401 })
+                return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
             }
             userId = decoded.userId
         } catch {
-            return NextResponse.json({ error: 'Błędny lub wygasły token' }, { status: 401 })
+            return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 })
         }
 
         const reports = await prisma.problemReport.findMany({
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json(reports)
     } catch (err) {
-        console.error('Błąd w /api/reports/user:', err)
-        return NextResponse.json({ error: 'Wewnętrzny błąd serwera' }, { status: 500 })
+        console.error('Error /api/reports/user:', err)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }

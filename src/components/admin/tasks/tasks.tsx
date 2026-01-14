@@ -9,6 +9,11 @@ type ProblemReport = {
     description: string
     status: string
     reported_by: number
+    reporter?: {
+        apartment?: {
+            number: string | number
+        } | null
+    } | null
 }
 
 export const AdminProblemReports = () => {
@@ -20,14 +25,13 @@ export const AdminProblemReports = () => {
             credentials: 'include',
         })
             .then(async res => {
-                if (!res.ok) throw new Error('Błąd API')
-                const data = await res.json()
-                if (!Array.isArray(data)) throw new Error('Nieprawidłowy format odpowiedzi')
-                const filtered = data.filter((report: ProblemReport) => report.status === 'ZGLOSZONE')
+                if (!res.ok) throw new Error('API error')
+                const data: ProblemReport[] = await res.json()
+                const filtered = data.filter(r => r.status === 'REPORTED')
                 setReports(filtered)
             })
             .catch(err => {
-                console.error('Błąd pobierania:', err)
+                console.error('Fetching error:', err)
                 setReports([])
             })
     }, [])
@@ -35,7 +39,7 @@ export const AdminProblemReports = () => {
     async function handleAction(id: number, action: 'accept' | 'reject') {
         await fetch(`/api/reports/${id}/${action}`, {
             method: 'POST',
-            credentials: 'include', // ✅ include httpOnly cookie
+            credentials: 'include',
         })
         setReports(r => r.filter(report => report.id !== id))
     }
@@ -51,6 +55,11 @@ export const AdminProblemReports = () => {
                         <li key={r.id} className={styles.reportElement}>
                             <h2 className={styles.reportTitle}>{r.title}</h2>
                             <p className={styles.reportDescription}>{r.description}</p>
+
+                            <p className={styles.apartmentTag}>
+                                Apartment: {r.reporter?.apartment?.number ?? '—'}
+                            </p>
+
                             <div className={styles.reportActions}>
                                 <button
                                     onClick={() => handleAction(r.id, 'accept')}
@@ -70,6 +79,5 @@ export const AdminProblemReports = () => {
                 </ul>
             )}
         </div>
-
     )
 }

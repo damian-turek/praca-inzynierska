@@ -13,6 +13,7 @@ import {MdOutlineSpaceDashboard, MdPayment} from 'react-icons/md'
 import React, {type ReactElement} from "react";
 import Chatbot from "@/components/chatbot/ChatBot";
 import { ToastContainer } from "react-toastify";
+import { PiUsersThreeBold } from "react-icons/pi";
 
 type Link = {
     href: string
@@ -28,6 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { href: 'shared-space', label: 'sharedSpace', icon: <CgGames />},
         { href: 'add-user', label: 'addUser', icon: <HiOutlineUserAdd />},
         { href: 'document-pdf', label: 'documentPdf', icon: <MdPayment />},
+        { href: 'users', label: 'users', icon: <PiUsersThreeBold />},
     ]
     return (
         <div className={styles.container}>

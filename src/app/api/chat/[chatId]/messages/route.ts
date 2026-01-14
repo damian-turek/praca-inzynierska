@@ -4,14 +4,12 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret";
 
-// Rozwiązanie parametrów dla App Router dynamic API
 async function resolveParams(context: any) {
     if (!context) return {};
     const maybeParams = context.params ?? context;
     return typeof maybeParams?.then === "function" ? await maybeParams : maybeParams;
 }
 
-// GET /api/chat/[chatId]/messages
 export async function GET(req: Request, context: any) {
     const params = await resolveParams(context);
     const chatId = Number(params?.chatId);
@@ -27,7 +25,6 @@ export async function GET(req: Request, context: any) {
     return NextResponse.json(messages);
 }
 
-// POST /api/chat/[chatId]/messages
 export async function POST(req: Request, context: any) {
     const params = await resolveParams(context);
     const chatIdParam = params?.chatId ? Number(params.chatId) : undefined;

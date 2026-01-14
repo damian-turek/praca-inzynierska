@@ -2,7 +2,6 @@ import Image from 'next/image'
 
 import styles from './about-us.module.css'
 import Link from 'next/link'
-// TODO: move only one used components to app folder
 export const AboutUs = () => (
     <div className={styles.aboutUsContainer}>
         <div>

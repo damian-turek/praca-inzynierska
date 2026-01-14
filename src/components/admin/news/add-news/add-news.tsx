@@ -27,7 +27,7 @@ export const AddNews = ({ onNewsAdded }: AddNewsProps) => {
             const res = await fetch('/api/news', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include', // ✅ include httpOnly cookie
+                credentials: 'include',
                 body: JSON.stringify({ title, message }),
             })
 

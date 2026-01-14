@@ -41,29 +41,29 @@ export const Register = () => {
 
             const data = await res.json()
             if (res.ok) {
-                setStatusMessage('✅ Wniosek o rejestrację został wysłany. Poczekaj na zatwierdzenie przez administratora.')
+                setStatusMessage('Your registration request has been sent. Please wait for approval from the administrator.')
             } else {
-                setError(data.errors || '❌ Wystąpił błąd.')
+                setError(data.errors || 'An error has occurred.')
             }
         } catch {
-            setError('❌ Coś poszło nie tak.')
+            setError('Something went wrong. Please try again later.')
         }
     }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
-            <h2>Rejestracja użytkownika</h2>
+            <h2>User Registration</h2>
             <p className={styles.welcomeBackText}>
-                Podaj swoje dane, a administrator zatwierdzi Twoje konto po weryfikacji.
+                Enter your details and the administrator will approve your account after verification.
             </p>
 
-            <input name="first_name" type="text" placeholder="Imię" onChange={handleChange} value={formData.first_name} required />
-            <input name="second_name" type="text" placeholder="Nazwisko" onChange={handleChange} value={formData.second_name} required />
+            <input name="first_name" type="text" placeholder="First name" onChange={handleChange} value={formData.first_name} required />
+            <input name="second_name" type="text" placeholder="Last name" onChange={handleChange} value={formData.second_name} required />
             <input name="email" type="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
-            <input name="phone_number" type="tel" placeholder="Telefon" onChange={handleChange} value={formData.phone_number} required />
+            <input name="phone_number" type="tel" placeholder="Phone number" onChange={handleChange} value={formData.phone_number} required />
             <input name="pesel" type="text" placeholder="PESEL" onChange={handleChange} value={formData.pesel} required maxLength={11} />
 
-            <button type="submit">Wyślij wniosek</button>
+            <button type="submit">Submit your application</button>
 
             {statusMessage && <p style={{ color: 'green', marginTop: '10px' }}>{statusMessage}</p>}
             {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
